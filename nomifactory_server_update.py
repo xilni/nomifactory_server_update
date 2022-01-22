@@ -103,9 +103,14 @@ def install_new_server(directory: str, server_zip: str, old_server_directory: st
     if old_server_directory and os.path.exists(old_server_directory):
         print("Copying over essentials from old server directory")
         for file in SERVER_FILES_TO_COPY:
-            if os.path.exists(f"{old_server_directory}/{file}"):
-                print(f"Copying {old_server_directory}/{file} to {directory}/{file}")
-                shutil.copy(f"{old_server_directory}/{file}", f"{directory}/{file}")
+            source = f"{old_server_directory}/{file}"
+            dest = f"{directory}/{file}"
+            if os.path.exists(source):
+                print(f"Copying {source} to {dest}")
+                if os.path.isdir(source):
+                    shutil.copytree(source, dest)
+                else:
+                    shutil.copy(source, dest)
 
 
 if __name__ == "__main__":
